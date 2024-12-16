@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arithmetic Operations Table</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        #arithmetic-table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        #arithmetic-table th, #arithmetic-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        #arithmetic-table th {
+            background-color: #f0f0f0;
+        }
+
+        #add-row-btn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #add-row-btn:hover {
+            background-color: #3e8e41;
+        }
+    </style>
+</head>
+<body>
+    <h1>Arithmetic Operations Table</h1>
+    <table id="arithmetic-table">
+        <thead>
+            <tr>
+                <th>Number 1</th>
+                <th>Number 2</th>
+                <th>Operation</th>
+                <th>Result</th>
+            </tr>
+        </thead>
+        <tbody id="table-body">
+            <!-- Table rows will be generated dynamically -->
+        </tbody>
+    </table>
+    <button id="add-row-btn">Add Row</button>
+
+    <script>
+        // Get the table body element
+        const tableBody = document.getElementById('table-body');
+
+        // Get the add row button element
+        const addRowBtn = document.getElementById('add-row-btn');
+
+        // Function to generate a table row
+        function generateTableRow() {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td><input type="number" id="num1"></td>
+                <td><input type="number" id="num2"></td>
+                <td>
+                    <select id="operation">
+                        <option value="add">Add</option>
+                        <option value="subtract">Subtract</option>
+                        <option value="multiply">Multiply</option>
+                        <option value="divide">Divide</option>
+                    </select>
+                </td>
+                <td id="result"></td>
+            `;
+            tableBody.appendChild(row);
+
+            // Add event listener to the operation select element
+            const operationSelect = row.querySelector('#operation');
+            operationSelect.addEventListener('change', calculateResult);
+
+            // Add event listener to the number input elements
+            const num1Input = row.querySelector('#num1');
+            const num2Input = row.querySelector('#num2');
+            num1Input.addEventListener('input', calculateResult);
+            num2Input.addEventListener('input', calculateResult);
+        }
+
+        // Function to calculate the result
+        function calculateResult() {
+            const row = this.closest('tr');
+            const num1Input = row.querySelector('#num1');
+            const num2Input = row.querySelector('#num2');
+            const operationSelect = row.querySelector('#operation');
+            const resultTd = row.querySelector('#result');
+
+            const num1 = parseFloat(num1Input.value);
+            const num2 = parseFloat(num2Input.value);
+            const operation = operationSelect.value;
+
+            let result;
+
+            switch (operation) {
+                case 'add':
+                    result = num1 + num2;
+                    break;
+                case 'subtract':
+                    result = num1 - num2;
+                    break;
+                case 'multiply':
+                    result = num1 * num2;
+                    break;
+                case 'divide':
+                    if (num2 === 0) {
+                        result = 'Error: Division by zero!';
+                    } else {
+                        result = num1 / num2;
+                    }
+                    break;
+                default:
+                    result = '';
+            }
+
+            resultTd.textContent = result.toString();
+        }
+
+        // Add event listener to the add row button
+        addRowBtn.addEventListener('click', generateTableRow);
+
+        // Generate the first table row
+        generateTableRow();
+    </script>
+</body>
+</html>
